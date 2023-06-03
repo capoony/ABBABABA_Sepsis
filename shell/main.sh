@@ -1,10 +1,5 @@
 ### poolfstat
 
-##  4               5               6               7           8               9               10          11          12              13          14
-## "CevennesCyn","EstoniaCyn","PetroiaCyn","SorenbergCyn","ZurichCyn","ZurichNeo","CevennesNeo","GeschinenNeo","HospentalNeo","SorenbergNeo","Sor"
-
-
-
 gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST.sync.gz \
     | cut -f1-3,5,7,13,14 \
     | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/data/PhCSoC.sync.gz
@@ -592,73 +587,7 @@ python3 /media/inter/mkapun/projects/ABBABABA_Sepsis/scripts/SummarizePoolHMM.py
     > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/poolhmm_excess/ZuN.GeN_mean_ABBAZurichNeo.txt 
 
 
-
-
-
-Comp.SoC.Inter.PtC<- list(
-     "Sym"=DATA.SoC.intra[!is.na(DATA.SoC.intra[["SoC.PtC_mean"]]),]$Window,
-     "Allo"=DATA.SoC.inter$Window)
-
-res=supertest(Comp.SoC.Inter.PtC,n=N)
-
-## Interspecific: SoN
-
-DATA.SoC.inter <- na.omit(DATA %>%
-     spread(Comp,FST) %>%
-     mutate(DeltaFST=`SoC.SoN_mean` -`SoN.GeN_mean`) %>%
-     select(Window,DeltaFST) %>%
-     arrange(Window, desc(DeltaFST))) %>% 
-     filter(DeltaFST > quantile(DeltaFST, .99))
-
-write.table(data.frame(DATA.SoC.inter$Window,DATA.SoC.inter$DeltaFST),
-     "/media/inter/mkapun/projects/ABBABABA_Sepsis/results/SoC_Inter/SoC_Inter_Candidates_FST.txt",
-     row.names=F,
-     col.names=F,
-     quote = F)
-
-Comp.SoC.Inter.PtC<- list(
-     "Sym"=DATA.SoC.intra[!is.na(DATA.SoC.intra[["SoC.PtC_mean"]]),]$Window,
-     "Allo"=DATA.SoC.inter$Window)
-
-res=supertest(Comp.SoC.Inter.PtC,n=N)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ## SoC:PtC and SoC:PhC
-# DATA.SoC.intra <- DATA.top10%>%
-#      pivot_wider(names_from=Comp,values_from=FST) %>%
-#      select(Window,`SoC.PtC_mean`,`SoC.PhC_mean`)
-
-# ## compare windows with Superexacttest
-# Comp.SoC<- list(
-#      "SoCPtC"=DATA.SoC.intra[!is.na(DATA.SoC.intra[["SoC.PtC_mean"]]),]$Window,
-#      "SoCPhc"=DATA.SoC.intra[!is.na(DATA.SoC.intra[["SoC.PhC_mean"]]),]$Window)
-
-# res=supertest(Comp.SoC,n=N)
-
-# write.table(data.frame(DATA.SoC.intra[!is.na(DATA.SoC.intra[["SoC.PhC_mean"]]),]$Window,
-#         DATA.SoC.intra[!is.na(DATA.SoC.intra[["SoC.PhC_mean"]]),][["SoC.PhC_mean"]]),
-#      "/media/inter/mkapun/projects/ABBABABA_Sepsis/results/SoCPhC/SoCPhC_Candidates_FST.txt",
-#      row.names=F,
-#      col.names=F,
-#      quote = F)
-
-
-
-### on MacPro Do 
-
+#### Test if significant overlap?
 
 for i in /Volumes/MartinResearch2/Wolf2019/ABBABABA_Sepsis/results/overlap/*_FST.txt; do
 
@@ -687,6 +616,16 @@ for i in /Volumes/MartinResearch2/Wolf2019/ABBABABA_Sepsis/results/overlap/*.can
      sh /Volumes/MartinResearch2/Wolf2019/shell/doBlast_ABBA.sh \
           ${ID} &
 done
+
+## summarize for canidates:
+
+python /media/inter/mkapun/projects/ABBABABA_Sepsis/scripts/tableCand.py \
+    --input /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap \
+    > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/CandWindGenesFST.txt
+
+python /media/inter/mkapun/projects/ABBABABA_Sepsis/scripts/tableOverlap.py \
+    --input /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap \
+    > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/OverlapWindGenesFST.txt
 
 
 sim6p.allelecount.fstats<-compute.fstats(SG.pooldata,nsnp.per.bjack.block = 1000,
