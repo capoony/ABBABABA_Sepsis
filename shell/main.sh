@@ -482,6 +482,9 @@ for index in ${!Tests[@]}; do
 
 done
 
+cp /media/inter/mkapun/projects/ABBABABA_Sepsis/results/poolhmm/*/*_Candidates_FST.txt \
+/media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap
+
 
 ## now test if there is significant overlap among windows 
 mkdir /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap
