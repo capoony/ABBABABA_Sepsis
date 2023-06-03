@@ -631,3 +631,36 @@ python /media/inter/mkapun/projects/ABBABABA_Sepsis/scripts/tableOverlap.py \
 sim6p.allelecount.fstats<-compute.fstats(SG.pooldata,nsnp.per.bjack.block = 1000,
 computeDstat = TRUE, snp.window.sizes=50)
 head(sim6p.allelecount.fstats@f3.values,3)
+
+
+echo """
+library(tidyverse)
+pnames <- as.character(c('Chrom','Pos','MoC','PhC','PtC','SoC','ZuC','ZuN','MoN','GeN','HoN','SoN'))
+Spec <- as.character(c('S.neocynipsea','S.neocynipsea','S.cynipsea','S.neocynipsea','S.cynipsea','S.cynipsea','S.cynipsea','S.neocynipsea','S.cynipsea','S.neocynipsea'))
+DATA=read.table("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/ABBABABA_1k_1000_1000.pi",header=F)
+
+colnames(DATA)<-pnames
+
+DATA.means <- DATA %>%
+    gather(Sample,Value,3:last_col()) %>%
+    group_by(Sample)%>%
+    summarise(Mean = mean(Value, na.rm=TRUE), SD = sd(Value, na.rm=TRUE), SE=SD/sqrt(n()))
+
+DATA.means$Species <- Spec
+
+DATA.new <- DATA.means%>%
+    arrange(Species,Sample)
+
+PLOT<- ggplot(DATA.new,aes(x=Sample,y=Mean,fill=Species))+
+    geom_bar(stat="identity")+
+    geom_errorbar(aes(ymin=Mean-SE, ymax=Mean+SE), width=.2,
+                 position=position_dodge(.9))+
+    scale_fill_manual(values=c("blue","red"))+
+    ylab("pi")+
+    xlab("")+
+    theme_bw()
+
+ggsave("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/Pi_plot.pdf",
+    PLOT,
+    width=5,
+    height=3)
