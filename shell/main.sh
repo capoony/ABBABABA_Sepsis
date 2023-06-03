@@ -657,6 +657,38 @@ res=supertest(Comp.SoC.Inter.PtC,n=N)
 
 
 
+### on MacPro Do 
+
+
+for i in /Volumes/MartinResearch2/Wolf2019/ABBABABA_Sepsis/results/overlap/*_FST.txt; do
+
+     ID=${i%.*}
+
+     # python3 /Volumes/MartinResearch2/Wolf2019/scripts/FASTA4windows.py \
+     #      --input ${ID}.txt \
+     #      --FASTA /Volumes/MartinResearch2/Wolf2019/references/seto_01_genome.fasta \
+     #      --windowsize 1000 \
+     #      >${ID}.fasta
+
+     sh /Volumes/MartinResearch2/Wolf2019/shell/doBlast_ABBA.sh \
+          ${ID} &
+done
+
+for i in /Volumes/MartinResearch2/Wolf2019/ABBABABA_Sepsis/results/overlap/*.cand; do
+
+     ID=${i%.*}
+
+     # python3 /Volumes/MartinResearch2/Wolf2019/scripts/FASTA4windows.py \
+     #      --input ${ID}.cand \
+     #      --FASTA /Volumes/MartinResearch2/Wolf2019/references/seto_01_genome.fasta \
+     #      --windowsize 1000 \
+     #      >${ID}.fasta
+
+     sh /Volumes/MartinResearch2/Wolf2019/shell/doBlast_ABBA.sh \
+          ${ID} &
+done
+
+
 sim6p.allelecount.fstats<-compute.fstats(SG.pooldata,nsnp.per.bjack.block = 1000,
 computeDstat = TRUE, snp.window.sizes=50)
 head(sim6p.allelecount.fstats@f3.values,3)
