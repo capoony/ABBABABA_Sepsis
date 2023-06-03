@@ -1,0 +1,4 @@
+SweepCand	SweepRand	NoSweepCand	NoSweepRand
+[[93, 89], [77, 67]]
+odd ratio is : 0.9092368305851452
+p_value is : 0.7378197057143325
