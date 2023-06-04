@@ -1,9 +1,4 @@
-### poolfstat
-
-gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST.sync.gz \
-    | cut -f1-3,5,7,13,14 \
-    | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/data/PhCSoC.sync.gz
-
+### poolfsta
 
 ##  4     ,5,    6,    7,    8,    9,    10,   11,  12,   13,   14
 ## "ZuC","PhC","PtC","SoC","MoC","ZuN","MoN","GeN","HoN","SoN","Sor"
@@ -695,6 +690,22 @@ python /media/inter/mkapun/projects/ABBABABA_Sepsis/scripts/tableOverlap.py \
     > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/OverlapWindGenesFST.txt
 
 
+
+### Summarize Overlap
+
+awk 'NR==1' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap/SoCISoC.txt \
+    > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/Overlap.txt
+
+for i in /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap/*.txt
+
+do
+
+if [[ ${i} != *"FST"* ]];then
+    awk 'NR==4' $i >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/Overlap.txt
+fi
+
+done
+
 ### Summarize GO Terms
 
 for i in /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap/*.go
@@ -743,3 +754,35 @@ ggsave("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/Pi_plot.pdf",
     PLOT,
     width=5,
     height=3)
+
+    ### Make Heatmap from FST
+
+""" >
+
+echo """
+
+
+#install.packages('poolfstat')
+library('poolfstat')
+library(tidyverse)
+library(SuperExactTest)
+
+##### Convert sync file to poolfstat file, and call SNPS
+
+psizes <- as.numeric(c(50,50,50,50,50,50,50,50,50,50,10))
+pnames <- as.character(c('ZuC','MoC','PhC','PtC','SoC','ZuN','MoN','GeN','HoN','SoN','Sor'))
+
+SG.pooldata <- popsync2pooldata(sync.file = '/media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST_new.sync.gz', poolsizes = psizes, poolnames = pnames,
+                                     min.rc = 4, min.cov.per.pool = 10, max.cov.per.pool = 400,
+                                     min.maf = 0.01, noindel = TRUE, nlines.per.readblock = 1e+06)
+
+##### From this file we can compute global and per SNP FSTs
+FST <- compute.pairwiseFST(SG.pooldata, method = 'Identity')
+pdf('/media/inter/mkapun/projects/ABBABABA_Sepsis/results/FST_heatmap.pdf',
+    width=6,
+    height=6,)
+
+heatmap(FST,col=colorRampPalette(c("yellow", "orange", "red"))(256))
+legend(x="topright", 
+    legend=c(min(FST@values[,1]), mean(FST@values[,1]), max(FST@values[,1])),fill=c("yellow","orange","red"))
+dev.off()
