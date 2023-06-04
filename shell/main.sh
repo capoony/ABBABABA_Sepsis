@@ -727,7 +727,7 @@ echo """
 library(tidyverse)
 pnames <- as.character(c('Chrom','Pos','MoC','PhC','PtC','SoC','ZuC','ZuN','MoN','GeN','HoN','SoN'))
 Spec <- as.character(c('S.neocynipsea','S.neocynipsea','S.cynipsea','S.neocynipsea','S.cynipsea','S.cynipsea','S.cynipsea','S.neocynipsea','S.cynipsea','S.neocynipsea'))
-DATA=read.table("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/ABBABABA_new_10000_10000.pi",header=F)
+DATA=read.table("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/ABBABABA_1k_1000_1000.pi",header=F)
 
 colnames(DATA)<-pnames
 
@@ -750,7 +750,7 @@ PLOT<- ggplot(DATA.new,aes(x=Sample,y=Mean,fill=Species))+
     xlab("")+
     theme_bw()
 
-ggsave("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/Pi_plot_new.pdf",
+ggsave("/media/inter/mkapun/projects/ABBABABA_Sepsis/results/Pi_plot.pdf",
     PLOT,
     width=5,
     height=3)
