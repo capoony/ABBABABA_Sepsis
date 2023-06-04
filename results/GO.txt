@@ -1,0 +1,6 @@
+SoC_Inter_Candidates_FST	GO:0006071 glycerol metabolic process 0.0012443185597781521
+SoC_Inter_Candidates_FST	GO:0019400 alditol metabolic process 0.004251722466026474
+SoC_Inter_Candidates_FST	GO:0006094 gluconeogenesis 0.005838992096728467
+SoC_Inter_Candidates_FST	GO:0019319 hexose biosynthetic process 0.005838992096728467
+SoC_Inter_Candidates_FST	GO:0046364 monosaccharide biosynthetic process 0.0077748541528109005
+SoC.PtC_mean_Candidates_FST	GO:0005975 carbohydrate metabolic process 4.4523191485743597e-07

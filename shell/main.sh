@@ -5,15 +5,82 @@ gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4
     | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/data/PhCSoC.sync.gz
 
 
-##  4               5               6               7           8               9               10          11          12              13          14
-## "ZurichCyn","EstoniaCyn","PetroiaCyn","SorenbergCyn","CevennesCyn","ZurichNeo","CevennesNeo","GeschinenNeo","HospentalNeo","SorenbergNeo","Sor"
+##  4     ,5,    6,    7,    8,    9,    10,   11,  12,   13,   14
+## "ZuC","PhC","PtC","SoC","MoC","ZuN","MoN","GeN","HoN","SoN","Sor"
 
 
-mkdir -p /media/inter/mkapun/projects/ABBABABA_Sepsis/results
-gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST.sync.gz \
-    | cut -f1-3,5,4,10,14 \
-    | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/data/PhCCeC.sync.gz
+mkdir -p /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4
 
+NAMES=(SoC_PtC SoC_PhC SoN_GeN SoN_HoN ZuC_PtC ZuC_PhC ZuN_GeN ZuN_HoN MoC_PtC MoC_PhC MoN_GeN MoN_HoN)
+CompFull=("6,7,13,14" "5,7,13,14" "11,13,7,14" "12,13,7,14" "6,4,9,14" "6,5,9,14" "11,9,4,14" "12,9,4,14" "6,8,10,14" "5,8,10,14" "11,10,8,14" "12,10,8,14")
+P1full=(PtC PhC GeN HoN PtC PhC GeN HoN PtC PhC GeN HoN PtC PhC GeN HoN)
+P2full=(SoC SoC SoN SoN ZuC ZuC ZuN ZuN MoC MoC MoN MoN)
+P3full=(SoN SoN SoC SoC ZuN ZuN ZuC ZuC MoN MoN MoC MoC)
+P4full=(Sor Sor Sor Sor Sor Sor Sor Sor Sor Sor Sor Sor)
+
+
+for index in ${!NAMES[@]}; do
+     P1=${P1full[index]}
+     P2=${P2full[index]}
+     P3=${P3full[index]}
+     P4=${P4full[index]}
+     Comp="-f1-3,"${CompFull[index]}
+     Name=${NAMES[index]}
+
+     echo cut ${Comp}
+
+    # gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST.sync.gz \
+    #     | cut ${Comp} \
+    #     | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.sync.gz
+
+    echo """
+
+    #install.packages('poolfstat')
+    library('poolfstat')
+    library(tidyverse)
+    library(SuperExactTest)
+
+    ##### Convert sync file to poolfstat file, and call SNPS
+
+    # We first have to give haploid sizes of each pool. Here, I had mostly 40 individuals per pool, and since I am working with diploid species, we multiply that by 2,  to get 80 individuals for most pools.
+    psizes <- as.numeric(c(50,50,50,10))
+    # Then we give the names of each pool/sample.
+    pnames <- as.character(c('$P1','$P2','$P3','$P4'))
+
+    SG.pooldata <- popsync2pooldata(sync.file = '/media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.sync.gz', 
+        poolsizes = psizes, 
+        poolnames = pnames,
+        min.rc = 4, min.cov.per.pool = 10, 
+        max.cov.per.pool = 400,
+        min.maf = 0.01, 
+        noindel = TRUE, 
+        nlines.per.readblock = 1e+06)
+
+
+    STAT<-compute.fstats(SG.pooldata,nsnp.per.bjack.block = 1000,computeDstat = TRUE)
+    NEW<-head(STAT@Dstat.values,3)
+    write.table(NEW,
+    file='/media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}_f4.stat',
+    quote=F)
+
+    """ > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.r
+
+    Rscript /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.r
+
+done
+
+NAMES=(SoC_PhC SoN_GeN SoN_HoN ZuC_PtC ZuC_PhC ZuN_GeN ZuN_HoN MoC_PtC MoC_PhC MoN_GeN MoN_HoN)
+
+awk 'NR<3' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/SoC_PtC_f4.stat \
+    >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/Dstat.txt
+
+for index in ${!NAMES[@]}; do
+     Name=${NAMES[index]}
+
+     awk 'NR==2' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}_f4.stat \
+    >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/Dstat.txt
+
+done
 
 echo """
 #install.packages('poolfstat')
@@ -628,10 +695,22 @@ python /media/inter/mkapun/projects/ABBABABA_Sepsis/scripts/tableOverlap.py \
     > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/OverlapWindGenesFST.txt
 
 
-sim6p.allelecount.fstats<-compute.fstats(SG.pooldata,nsnp.per.bjack.block = 1000,
-computeDstat = TRUE, snp.window.sizes=50)
-head(sim6p.allelecount.fstats@f3.values,3)
+### Summarize GO Terms
 
+for i in /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap/*.go
+
+do
+
+tmp=${i##*/}
+ID=${tmp%.*}
+
+echo $ID
+
+awk -v ID=$ID '{print ID"\t"$0}' $i >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/GO.txt
+
+done
+
+### Summarize Pi
 
 echo """
 library(tidyverse)
