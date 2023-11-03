@@ -1,17 +1,15 @@
 ### poolfstat 
+pnames <- as.character(c('ZuC','MoC','PhC','PtC','SoC','ZuN','MoN','GeN','HoN','SoN','Sor'))
+pnames <- as.character(c('4',  '5',  '6',  '7',  '8',  '9',  '10', '11', '12'','13', '14'))
 
-##  4     ,5,    6,    7,    8,    9,    10,   11,  12,   13,   14
-## "ZuC","PhC","PtC","SoC","MoC","ZuN","MoN","GeN","HoN","SoN","Sor"
 
-
-mkdir -p /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4
-
-NAMES=(SoC_PtC SoC_PhC SoN_GeN SoN_HoN ZuC_PtC ZuC_PhC ZuN_GeN ZuN_HoN MoC_PtC MoC_PhC MoN_GeN MoN_HoN)
-CompFull=("6,7,13,14" "5,7,13,14" "11,13,7,14" "12,13,7,14" "6,4,9,14" "6,5,9,14" "11,9,4,14" "12,9,4,14" "6,8,10,14" "5,8,10,14" "11,10,8,14" "12,10,8,14")
-P1full=(PtC PhC GeN HoN PtC PhC GeN HoN PtC PhC GeN HoN PtC PhC GeN HoN)
-P2full=(SoC SoC SoN SoN ZuC ZuC ZuN ZuN MoC MoC MoN MoN)
-P3full=(SoN SoN SoC SoC ZuN ZuN ZuC ZuC MoN MoN MoC MoC)
-P4full=(Sor Sor Sor Sor Sor Sor Sor Sor Sor Sor Sor Sor)
+mkdir /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/
+NAMES=(SoC_PtC SoC_PhC SoN_GeN SoN_HoN) ZuC_PtC ZuC_PhC ZuN_GeN ZuN_HoN MoC_PtC MoC_PhC MoN_GeN MoN_HoN)
+CompFull=("7,8,13,14" "6,8,13,14" "11,13,8,14" "12,13,8,14")  "6,4,9,14" "6,5,9,14" "11,9,4,14" "12,9,4,14" "6,8,10,14" "5,8,10,14" "11,10,8,14" "12,10,8,14")
+P1full=(PtC PhC GeN HoN) PtC PhC GeN HoN PtC PhC GeN HoN PtC PhC GeN HoN)
+P2full=(SoC SoC SoN SoN) ZuC ZuC ZuN ZuN MoC MoC MoN MoN)
+P3full=(SoN SoN SoC SoC) ZuN ZuN ZuC ZuC MoN MoN MoC MoC)
+P4full=(Sor Sor Sor Sor) Sor Sor Sor Sor Sor Sor Sor Sor)
 
 
 for index in ${!NAMES[@]}; do
@@ -24,9 +22,9 @@ for index in ${!NAMES[@]}; do
 
      echo cut ${Comp}
 
-    gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST.sync.gz \
+    gunzip -c /media/inter/mkapun/projects/ABBABABA_Sepsis/data/ABBA_BABA-filtered_4poolFST_new.sync.gz \
         | cut ${Comp} \
-        | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.sync.gz
+        | gzip > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/${Name}.sync.gz
 
     echo """
 
@@ -42,7 +40,7 @@ for index in ${!NAMES[@]}; do
     # Then we give the names of each pool/sample.
     pnames <- as.character(c('$P1','$P2','$P3','$P4'))
 
-    SG.pooldata <- popsync2pooldata(sync.file = '/media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.sync.gz', 
+    SG.pooldata <- popsync2pooldata(sync.file = '/media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/${Name}.sync.gz', 
         poolsizes = psizes, 
         poolnames = pnames,
         min.rc = 4, min.cov.per.pool = 10, 
@@ -55,24 +53,24 @@ for index in ${!NAMES[@]}; do
     STAT<-compute.fstats(SG.pooldata,nsnp.per.bjack.block = 1000,computeDstat = TRUE)
     NEW<-head(STAT@Dstat.values,3)
     write.table(NEW,
-    file='/media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}_f4.stat',
+    file='/media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/${Name}_f4.stat',
     quote=F)
 
-    """ > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.r
+    """ > /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/${Name}.r
 
-    Rscript /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}.r
+    Rscript /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/${Name}.r
 
 done
 
 NAMES=(SoC_PhC SoN_GeN SoN_HoN ZuC_PtC ZuC_PhC ZuN_GeN ZuN_HoN MoC_PtC MoC_PhC MoN_GeN MoN_HoN)
 
-awk 'NR<3' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/SoC_PtC_f4.stat \
+awk 'NR<3' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/SoC_PtC_f4.stat \
     >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/Dstat.txt
 
 for index in ${!NAMES[@]}; do
      Name=${NAMES[index]}
 
-     awk 'NR==2' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4/${Name}_f4.stat \
+     awk 'NR==2' /media/inter/mkapun/projects/ABBABABA_Sepsis/results/f4_new/${Name}_f4.stat \
     >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/Dstat.txt
 
 done
@@ -712,12 +710,12 @@ for i in /media/inter/mkapun/projects/ABBABABA_Sepsis/results/overlap/*.go
 
 do
 
-tmp=${i##*/}
-ID=${tmp%.*}
+    tmp=${i##*/}
+    ID=${tmp%.*}
 
-echo $ID
+    echo $ID
 
-awk -v ID=$ID '{print ID"\t"$0}' $i >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/GO.txt
+    awk -v ID=$ID '{print ID"\t"$0}' $i >> /media/inter/mkapun/projects/ABBABABA_Sepsis/results/GO.txt
 
 done
 

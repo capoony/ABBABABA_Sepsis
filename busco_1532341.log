@@ -1,0 +1,35 @@
+2023-06-09 07:30:37 INFO:__main__	****************** Start plot generation at 06/09/2023 07:30:37 ******************
+2023-06-09 07:30:37 INFO:__main__	Load data ...
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG0034.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.377.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.Ak7_full.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG47204.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.MEL_full.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG47203.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.378.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG_15.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.CS.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.Ak9_full.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.Re1_full.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG_16.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.Re6_full.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG_20.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.POP.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG0026.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.HG_09.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.Re10.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Loaded /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/short_summary.specific.rickettsiales_odb10.Re3.txt successfully
+2023-06-09 07:30:37 INFO:__main__	Generate the R code ...
+2023-06-09 07:30:37 INFO:__main__	Run the R code ...
+2023-06-09 07:30:39 INFO:__main__	
+[1] "Plotting the figure ..."
+[1] "Done"
+
+2023-06-09 07:30:39 ERROR:__main__	
+Warnmeldung:
+The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
+ℹ Please use the `linewidth` argument instead. 
+
+2023-06-09 07:30:39 INFO:__main__	Plot generation done. Total running time: 2.281630516052246 seconds
+2023-06-09 07:30:39 INFO:__main__	Results written in /media/inter/mkapun/projects/WolbachiaEvolHist_2023/results/CompGenomes/busco_summaries_red/
+
